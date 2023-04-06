@@ -1,14 +1,23 @@
 const mongoose = require('mongoose')
 
+
 const placeSchema = new mongoose.Schema({
  title: {
   type: String,
   required: [true, "add a title to your place"],
  },
  host: {
-  type: Schema.Types.ObjectId,
+  type: String,
   ref: 'User',
   required: [true, "host id is required"]
+ },
+ description: {
+  type: String,
+ },
+ category: {
+  type: String,
+  ref: 'Category',
+  default: "standard"
  },
  location: {
   type: String,
