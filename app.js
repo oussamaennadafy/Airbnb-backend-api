@@ -5,6 +5,7 @@ const usersRoutes = require('./routes/usersRouter')
 const placesRoutes = require('./routes/placesRoutes')
 
 app.use(cors())
+// routers
 app.use('/api/v1/users', usersRoutes)
 app.use('/api/v1/places', placesRoutes)
 

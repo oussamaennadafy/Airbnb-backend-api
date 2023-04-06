@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/oussamaennadafy/amazon-backend-apis.git"
+    "url": "git+https://github.com/oussamaennadafy/airbnb-backend-apis.git"
   },
   "author": "oussama ennadafy",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/oussamaennadafy/amazon-backend-apis/issues"
+    "url": "https://github.com/oussamaennadafy/airbnb-backend-apis/issues"
   },
-  "homepage": "https://github.com/oussamaennadafy/amazon-backend-apis#readme",
+  "homepage": "https://github.com/oussamaennadafy/airbnb-backend-apis#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
