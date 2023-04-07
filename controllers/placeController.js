@@ -34,7 +34,7 @@ const uploadPlaceImages = upload.array('images', 10)
 const getAllPlaces = async (req, res) =>
 {
  try {
-  const places = await Place.find()
+  const places = await Place.find().select('-description -ratingsCount -title -__v -host')
   res.status(200).json({
    status: "success",
    result: places.length,
@@ -73,7 +73,7 @@ const createPlace = async (req, res) =>
 {
  try {
   const { title, location, host, price, description } = req.body
-  const images = req.files?.map(image => `/img/places/${image.filename}`)
+  const images = req.files?.map(image => `http://localhost:8000/img/places/${image.filename}`)
   if (!title || !location || !host || !price || !images) throw new Error('something went wrong !')
   const createdPlace = await Place.create({
    title,
