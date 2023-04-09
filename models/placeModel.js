@@ -39,9 +39,11 @@ const placeSchema = new mongoose.Schema({
   default: 0,
   min: 0
  },
- availability: {
-  start: Date,
-  end: Date
+ from: {
+  type: String
+ },
+ to: {
+  type: String
  },
  price: {
   type: Number,
@@ -50,7 +52,11 @@ const placeSchema = new mongoose.Schema({
  images: {
   type: [String],
   required: [true, "add an image to your place"]
- }
+ },
+ maxAdults: Number,
+ maxChildren: Number,
+ maxInfants: Number,
+ maxPets: Number,
 })
 
 const Place = new mongoose.model('Place', placeSchema)
