@@ -105,10 +105,32 @@ const createPlace = async (req, res) =>
  }
 }
 
+const getPlacesByCategory = async (req, res) =>
+{
+ try {
+  const { category } = req.params
+  const places = await Place.find({ category })
+  res.status(200).json({
+   status: "success",
+   results: places.length,
+   body: {
+    places
+   }
+  })
+ } catch (err) {
+  console.log(err);
+  res.status(404).json({
+   status: "fail",
+   reason: "something went wrong",
+  })
+ }
+}
+
 
 module.exports = {
  getAllPlaces,
  getOnePlace,
  createPlace,
- uploadPlaceImages
+ uploadPlaceImages,
+ getPlacesByCategory
 }
