@@ -72,7 +72,7 @@ const getOnePlace = async (req, res) =>
 const createPlace = async (req, res) =>
 {
  try {
-  const { title, location, host, price, description, from, to, maxAdults, maxChildren, maxInfants,
+  const { title, location, host, price, description, category, from, to, maxAdults, maxChildren, maxInfants,
    maxPets } = req.body
   const images = req.files?.map(image => `http://localhost:8000/img/places/${image.filename}`)
   if (!title || !location || !host || !price || !images) throw new Error('something went wrong !')
@@ -83,6 +83,7 @@ const createPlace = async (req, res) =>
    host,
    price,
    images,
+   category,
    from: new Date(from),
    to: new Date(to),
    maxAdults,
