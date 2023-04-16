@@ -34,7 +34,7 @@ const uploadPlaceImages = upload.array('images', 10)
 const getAllPlaces = async (req, res) =>
 {
  try {
-  const places = await Place.find().select('-description -ratingsCount -title -__v -host')
+  const places = await Place.find()
   res.status(200).json({
    status: "success",
    result: places.length,

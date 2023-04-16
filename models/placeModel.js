@@ -7,7 +7,7 @@ const placeSchema = new mongoose.Schema({
   required: [true, "add a title to your place"],
  },
  host: {
-  type: String,
+  type: mongoose.Schema.Types.ObjectId,
   ref: 'User',
   required: [true, "host id is required"]
  },
@@ -16,8 +16,6 @@ const placeSchema = new mongoose.Schema({
  },
  category: {
   type: String,
-  ref: 'Category',
-  default: "standard"
  },
  location: {
   type: String,
