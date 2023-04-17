@@ -29,12 +29,22 @@ const upload = multer({
  fileFilter: multerFilter
 })
 
-const uploadPlaceImages = upload.array('images', 10)
+const uploadPlaceImages = upload.array('images', 15)
 
 const getAllPlaces = async (req, res) =>
 {
  try {
-  const places = await Place.find()
+  // remove some special fields from the query object
+  const queryObj = structuredClone(req.query);
+  const excludedFields = ['page', 'sort', 'limit', 'fields'];
+  excludedFields.forEach(field => delete queryObj[field])
+
+  // prepend $ for (gt | gte | lt | lte)
+  let queryStr = JSON.stringify(queryObj)
+  queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`)
+
+
+  const places = await Place.find(JSON.parse(queryStr))
   res.status(200).json({
    status: "success",
    result: places.length,
@@ -45,7 +55,8 @@ const getAllPlaces = async (req, res) =>
  } catch (err) {
   res.status(404).json({
    status: "fail",
-   reason: "something went wrong"
+   // reason: "something went wrong"
+   reason: err
   })
  }
 }
@@ -74,7 +85,7 @@ const createPlace = async (req, res) =>
  try {
   const { title, location, host, price, description, category, from, to, maxAdults, maxChildren, maxInfants,
    maxPets } = req.body
-  const images = req.files?.map(image => `http://localhost:8000/img/places/${image.filename}`)
+  const images = req.files?.map(image => `http://localhost:${process.env.PORT}/img/places/${image.filename}`)
   if (!title || !location || !host || !price || !images) throw new Error('something went wrong !')
   const createdPlace = await Place.create({
    title,
@@ -106,26 +117,26 @@ const createPlace = async (req, res) =>
  }
 }
 
-const getPlacesByCategory = async (req, res) =>
-{
- try {
-  const { category } = req.params
-  const places = await Place.find({ category })
-  res.status(200).json({
-   status: "success",
-   results: places.length,
-   body: {
-    places
-   }
-  })
- } catch (err) {
-  console.log(err);
-  res.status(404).json({
-   status: "fail",
-   reason: "something went wrong",
-  })
- }
-}
+// const getPlacesByCategory = async (req, res) =>
+// {
+//  try {
+//   const { category } = req.params
+//   const places = await Place.find({ category })
+//   res.status(200).json({
+//    status: "success",
+//    results: places.length,
+//    body: {
+//     places
+//    }
+//   })
+//  } catch (err) {
+//   console.log(err);
+//   res.status(404).json({
+//    status: "fail",
+//    reason: "something went wrong",
+//   })
+//  }
+// }
 
 
 module.exports = {
@@ -133,5 +144,5 @@ module.exports = {
  getOnePlace,
  createPlace,
  uploadPlaceImages,
- getPlacesByCategory
+ // getPlacesByCategory
 }

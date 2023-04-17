@@ -14,7 +14,7 @@ router.route('/')
 router.route("/:id")
  .get(getOnePlace)
 
-router.route("/categories/:category")
- .get(getPlacesByCategory)
+// router.route("/categories/:category")
+//  .get(getPlacesByCategory)
 
 module.exports = router
