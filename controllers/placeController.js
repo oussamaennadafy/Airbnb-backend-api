@@ -35,7 +35,7 @@ const getAllPlaces = async (req, res) =>
 {
  try {
   // remove some special fields from the query object
-  const queryObj = structuredClone(req.query);
+  const queryObj = { ...req.query };
   const excludedFields = ['page', 'sort', 'limit', 'fields'];
   excludedFields.forEach(field => delete queryObj[field])
 
@@ -44,7 +44,36 @@ const getAllPlaces = async (req, res) =>
   queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`)
 
 
-  const places = await Place.find(JSON.parse(queryStr))
+  let query = Place.find(JSON.parse(queryStr))
+
+  // filtring with fields
+  if (req.query.fields) {
+   const fields = req.query.fields.split(',').join(' ')
+   query = query.select(fields)
+  } else {
+   query = query.select('-__v')
+  }
+
+  // sorting
+  if (req.query.sort) {
+   query = query.sort(req.query.sort.split(',').join(' '))
+  } else {
+   query = query.sort('-viewedTimesLastWeek -ratingAverage')
+  }
+
+  // pagination
+  const page = req.query.page || 1
+  const limit = req.query.limit || 20
+  const skip = (page - 1) * limit
+
+  query = query.skip(skip).limit(limit)
+
+  if (req.query.page) {
+   const numTours = await Tour.countDocuments();
+   if (skip > numTours) throw new Error('This page does not exist')
+  }
+
+  const places = await query
   res.status(200).json({
    status: "success",
    result: places.length,
@@ -138,11 +167,23 @@ const createPlace = async (req, res) =>
 //  }
 // }
 
+const getTopFiveChaep = async (req, res) =>
+{
+ const topFiveChaepPlaces = await Place.find().sort('price').limit(5)
+ res.json({
+  status: "success",
+  results: topFiveChaepPlaces.length,
+  body: {
+   places: topFiveChaepPlaces
+  }
+ })
+}
 
 module.exports = {
  getAllPlaces,
  getOnePlace,
  createPlace,
  uploadPlaceImages,
- // getPlacesByCategory
+ // getPlacesByCategory,
+ getTopFiveChaep,
 }
