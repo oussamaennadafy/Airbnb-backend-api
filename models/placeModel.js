@@ -1,14 +1,16 @@
 const mongoose = require('mongoose')
-
+const slugify = require('slugify')
 
 const placeSchema = new mongoose.Schema({
  title: {
   type: String,
+  unique: true,
   required: [true, "add a title to your place"],
  },
+ slug: String,
  host: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: 'User',
+  type: String,
+  // ref: 'User',
   required: [true, "host id is required"]
  },
  description: {
@@ -55,6 +57,27 @@ const placeSchema = new mongoose.Schema({
  maxChildren: Number,
  maxInfants: Number,
  maxPets: Number,
+}, {
+ toJSON: { virtuals: true },
+ toObject: { virtuals: true },
+})
+
+placeSchema.virtual('shortDescription').get(function ()
+{
+ return `${this.description.slice(0, 50)}...`
+})
+
+// mongoose document middleware
+placeSchema.pre('save', function (next)
+{
+ this.slug = slugify(this.title, { lower: true })
+ next()
+})
+
+placeSchema.post('save', function (doc, next)
+{
+ console.log(doc);
+ next()
 })
 
 const Place = new mongoose.model('Place', placeSchema)

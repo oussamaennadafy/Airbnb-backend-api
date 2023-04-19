@@ -2,7 +2,7 @@ const loggedIn = (req, res, next) =>
 {
  next()
 }
-const mutateQueryRequest = (req, res, next) =>
+const aliasTopPlaces = (req, res, next) =>
 {
  req.query.sort = 'price';
  req.query.limit = '5';
@@ -12,5 +12,5 @@ const mutateQueryRequest = (req, res, next) =>
 
 module.exports = {
  loggedIn,
- mutateQueryRequest
+ aliasTopPlaces
 }

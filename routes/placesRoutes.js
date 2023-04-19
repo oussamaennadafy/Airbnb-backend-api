@@ -2,14 +2,25 @@ const express = require('express')
 const router = express.Router()
 
 // middlewares
-const { loggedIn, mutateQueryRequest } = require('./../middlewares/userMiddlewares')
+const { loggedIn, aliasTopPlaces } = require('./../middlewares/userMiddlewares')
 
 // route handlres
-const { getAllPlaces, getOnePlace, createPlace, uploadPlaceImages, getPlacesByCategory, getTopFiveChaep } = require('./../controllers/placeController')
+const {
+ getAllPlaces,
+ getOnePlace,
+ createPlace,
+ uploadPlaceImages,
+ getPlacesByCategory,
+ getTopFiveChaep,
+ getMonthlyPlan,
+} = require('./../controllers/placeController')
 
 
 router.route('/top-5-cheap')
- .get(mutateQueryRequest, getAllPlaces)
+ .get(aliasTopPlaces, getAllPlaces)
+
+router.route('/monthly-plan/:year')
+ .get(getMonthlyPlan)
 
 router.route("/:id")
  .get(getOnePlace)
