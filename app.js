@@ -6,6 +6,7 @@ const placesRoutes = require("./routes/placesRoutes");
 const categoriesRoutes = require("./routes/categoriesRoutes");
 const countriesRoutes = require("./routes/countriesRoutes");
 const AppError = require("./utils/appError");
+const globalErrorHandler = require("./controllers/errorHandler");
 
 // predefined middlewares
 app.use(cors());
@@ -24,16 +25,6 @@ app.all("*", (req, res, next) => {
 });
 
 // error handler middleware
-app.use((err, req, res, next) => {
-  err.statusCode ||= 500;
-  err.status ||= "error";
-
-  const { statusCode, status, message } = err;
-
-  res.status(statusCode).json({
-    status,
-    message,
-  });
-});
+app.use(globalErrorHandler);
 
 module.exports = app;
