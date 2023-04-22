@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "start:prod": "node index.js",
+    "start:prod": "set NODE_ENV=production & nodemon index.js",
     "debug": "ndb index.js"
   },
   "repository": {
