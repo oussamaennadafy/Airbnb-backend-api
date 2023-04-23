@@ -31,29 +31,21 @@ const upload = multer({
 
 const uploadPlaceImages = upload.array("images", 15);
 
-const getAllPlaces = async (req, res) => {
-  try {
-    const features = new APIFeatures(Place.find(), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
-    const places = await features.query;
-    res.status(200).json({
-      status: "success",
-      result: places.length,
-      body: {
-        places,
-      },
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      // reason: "something went wrong"
-      reason: err,
-    });
-  }
-};
+const getAllPlaces = catchAsync(async (req, res, next) => {
+  const features = new APIFeatures(Place.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+  const places = await features.query;
+  res.status(200).json({
+    status: "success",
+    result: places.length,
+    body: {
+      places,
+    },
+  });
+});
 
 const getOnePlace = catchAsync(async (req, res, next) => {
   const { id } = req.params;
@@ -147,26 +139,19 @@ const createPlace = catchAsync(async (req, res, next) => {
 //  })
 // }
 
-const getMonthlyPlan = async (req, res) => {
-  try {
-    const year = parseInt(req.params.year);
+const getMonthlyPlan = catchAsync(async (req, res) => {
+  const year = parseInt(req.params.year);
 
-    const plan = await Place.aggregate([{ $unwind: "$ratingsCount" }]);
+  const plan = await Place.aggregate([{ $unwind: "$ratingsCount" }]);
 
-    res.status(200).json({
-      status: "success",
-      result: plan.length,
-      body: {
-        plan,
-      },
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: "fail",
-      reason: "something went wrong",
-    });
-  }
-};
+  res.status(200).json({
+    status: "success",
+    result: plan.length,
+    body: {
+      plan,
+    },
+  });
+});
 
 module.exports = {
   getAllPlaces,
