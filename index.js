@@ -1,12 +1,28 @@
-const app = require("./app");
 const dotenv = require("dotenv");
-const connectDB = require("./config/db");
-dotenv.config();
-const port = process.env.PORT || 8000;
+dotenv.config({ path: "./config.env" });
+
+process.on("uncaughtException", (err) => {
+  console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");
+  console.log(err.name, err.message);
+  process.exit(1);
+});
+
+const app = require("./app");
+const connectDB = require("./config/database");
+
 connectDB();
 
-app.listen(port, () =>
+const port = process.env.PORT || 8000;
+const server = app.listen(port, () => {
   console.log(
-    `server running in ${process.env.NODE_ENV} mode, on port ${port}...`
-  )
-);
+    `Server running in ${process.env.NODE_ENV} mode on port ${port}...`
+  );
+});
+
+process.on("unhandledRejection", (err) => {
+  console.log("UNHANDLED REJECTION! 💥 Shutting down...");
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});

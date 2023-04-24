@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const morgan = require("morgan");
 const usersRoutes = require("./routes/usersRouter");
 const placesRoutes = require("./routes/placesRoutes");
 const categoriesRoutes = require("./routes/categoriesRoutes");
@@ -9,6 +10,9 @@ const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorHandler");
 
 // predefined middlewares
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 app.use(cors());
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));

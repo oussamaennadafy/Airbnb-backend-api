@@ -1,10 +1,8 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 
-const { getAllPrefixes } = require('./../controllers/countriesController')
+const { getAllPrefixes } = require("./../controllers/countriesController");
 
-router.route('/phonePrefixs')
- .get(getAllPrefixes)
+router.route("/phonePrefixs").get(getAllPrefixes);
 
-
-module.exports = router
+module.exports = router;

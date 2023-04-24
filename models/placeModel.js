@@ -76,7 +76,7 @@ placeSchema.pre("save", function (next) {
 });
 
 placeSchema.post("save", function (doc, next) {
-  console.log(doc);
+  // console.log(doc);
   next();
 });
 

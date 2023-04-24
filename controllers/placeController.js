@@ -106,6 +106,19 @@ const createPlace = catchAsync(async (req, res, next) => {
   });
 });
 
+const deletePlace = catchAsync(async (req, res, next) => {
+  const deletedPlace = await Place.findByIdAndDelete(req.params.id);
+  if (!deletedPlace) {
+    return next(new AppError("place is not exist", 404));
+  }
+  res.json({
+    status: "success",
+    body: {
+      deletedPlace,
+    },
+  });
+});
+
 // const getPlacesByCategory = async (req, res) =>
 // {
 //  try {
@@ -158,6 +171,7 @@ module.exports = {
   getOnePlace,
   createPlace,
   uploadPlaceImages,
+  deletePlace,
   // getPlacesByCategory,
   // getTopFiveChaep,
   getMonthlyPlan,
