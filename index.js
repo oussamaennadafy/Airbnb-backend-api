@@ -13,7 +13,7 @@ const connectDB = require("./config/database");
 connectDB();
 
 const port = process.env.PORT || 8000;
-const server = app.listen(port, () => {
+const server = app.listen(port, "192.168.1.111", () => {
   console.log(
     `Server running in ${process.env.NODE_ENV} mode on port ${port}...`
   );

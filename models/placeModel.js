@@ -70,8 +70,7 @@ placeSchema.virtual("shortDescription").get(function () {
 });
 
 // mongoose document middleware
-placeSchema.pre("save", function (next) {
-  this.slug = slugify(this.title, { lower: true });
+placeSchema.pre("updateMany", function (next) {
   next();
 });
 

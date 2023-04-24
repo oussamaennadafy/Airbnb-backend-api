@@ -2,9 +2,9 @@
 const Place = require("./../models/placeModel");
 const APIFeatures = require("./../utils/APIFeatures");
 const catchAsync = require("./../utils/catchAsync");
+const AppError = require("../utils/appError");
 
 const multer = require("multer");
-const AppError = require("../utils/appError");
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -79,7 +79,7 @@ const createPlace = catchAsync(async (req, res, next) => {
   } = req.body;
   const images = req.files?.map(
     (image) =>
-      `http://localhost:${process.env.PORT}/img/places/${image.filename}`
+      `http://192.168.1.111:${process.env.PORT}/img/places/${image.filename}`
   );
   // if (!title || !location || !host || !price || !images)
   // throw new Error("something went wrong !");
@@ -126,6 +126,22 @@ const updatePlace = catchAsync(async (req, res, next) => {
   });
 });
 
+const updateAllPlaces = catchAsync(async (req, res, next) => {
+  let places = await Place.find();
+
+  for (let i = 0; i < places.length; i++) {
+    let images = places[i].images.map((image) =>
+      image.replace("localhost", "192.168.1.111")
+    );
+    const updated = await Place.findByIdAndUpdate(places[i]._id, { images });
+  }
+
+  res.json({
+    status: "success",
+    body: "done",
+  });
+});
+
 const deletePlace = catchAsync(async (req, res, next) => {
   const deletedPlace = await Place.findByIdAndDelete(req.params.id);
   if (!deletedPlace) {
@@ -139,53 +155,6 @@ const deletePlace = catchAsync(async (req, res, next) => {
   });
 });
 
-// const getPlacesByCategory = async (req, res) =>
-// {
-//  try {
-//   const { category } = req.params
-//   const places = await Place.find({ category })
-//   res.status(200).json({
-//    status: "success",
-//    results: places.length,
-//    body: {
-//     places
-//    }
-//   })
-//  } catch (err) {
-//   console.log(err);
-//   res.status(404).json({
-//    status: "fail",
-//    reason: "something went wrong",
-//   })
-//  }
-// }
-
-// const getTopFiveChaep = async (req, res) =>
-// {
-//  const topFiveChaepPlaces = await Place.find().sort('price').limit(5)
-//  res.json({
-//   status: "success",
-//   results: topFiveChaepPlaces.length,
-//   body: {
-//    places: topFiveChaepPlaces
-//   }
-//  })
-// }
-
-const getMonthlyPlan = catchAsync(async (req, res) => {
-  const year = parseInt(req.params.year);
-
-  const plan = await Place.aggregate([{ $unwind: "$ratingsCount" }]);
-
-  res.status(200).json({
-    status: "success",
-    result: plan.length,
-    body: {
-      plan,
-    },
-  });
-});
-
 module.exports = {
   getAllPlaces,
   getOnePlace,
@@ -193,7 +162,6 @@ module.exports = {
   uploadPlaceImages,
   updatePlace,
   deletePlace,
-  // getPlacesByCategory,
-  // getTopFiveChaep,
-  getMonthlyPlan,
+  // rarely used functions
+  updateAllPlaces,
 };

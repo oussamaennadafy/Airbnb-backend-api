@@ -14,19 +14,21 @@ const {
   createPlace,
   uploadPlaceImages,
   updatePlace,
+  updateAllPlaces,
   deletePlace,
-  getPlacesByCategory,
-  getTopFiveChaep,
-  getMonthlyPlan,
 } = require("./../controllers/placeController");
 
 router.route("/top-5-cheap").get(aliasTopPlaces, getAllPlaces);
 
-router.route("/monthly-plan/:year").get(getMonthlyPlan);
+// router.route("/monthly-plan/:year").get(getMonthlyPlan);
 
 router.route("/:id").get(getOnePlace).delete(deletePlace).patch(updatePlace);
 
-router.route("/").get(getAllPlaces).post(uploadPlaceImages, createPlace);
+router
+  .route("/")
+  .get(getAllPlaces)
+  .post(uploadPlaceImages, createPlace)
+  .patch(updateAllPlaces);
 
 // router.route("/categories/:category")
 //  .get(getPlacesByCategory)
