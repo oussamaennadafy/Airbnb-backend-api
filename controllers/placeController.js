@@ -106,6 +106,26 @@ const createPlace = catchAsync(async (req, res, next) => {
   });
 });
 
+const updatePlace = catchAsync(async (req, res, next) => {
+  const updatedPlace = await Place.findByIdAndUpdate(req.params.id, req.body, {
+    returnDocument: "after",
+  });
+  if (!updatedPlace) {
+    return next(
+      new AppError(
+        `no place found to update with this id : ${req.params.id}`,
+        404
+      )
+    );
+  }
+  res.json({
+    status: "success",
+    body: {
+      updatedPlace,
+    },
+  });
+});
+
 const deletePlace = catchAsync(async (req, res, next) => {
   const deletedPlace = await Place.findByIdAndDelete(req.params.id);
   if (!deletedPlace) {
@@ -171,6 +191,7 @@ module.exports = {
   getOnePlace,
   createPlace,
   uploadPlaceImages,
+  updatePlace,
   deletePlace,
   // getPlacesByCategory,
   // getTopFiveChaep,

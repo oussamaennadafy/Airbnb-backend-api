@@ -13,6 +13,7 @@ const {
   getOnePlace,
   createPlace,
   uploadPlaceImages,
+  updatePlace,
   deletePlace,
   getPlacesByCategory,
   getTopFiveChaep,
@@ -23,7 +24,7 @@ router.route("/top-5-cheap").get(aliasTopPlaces, getAllPlaces);
 
 router.route("/monthly-plan/:year").get(getMonthlyPlan);
 
-router.route("/:id").get(getOnePlace).delete(deletePlace);
+router.route("/:id").get(getOnePlace).delete(deletePlace).patch(updatePlace);
 
 router.route("/").get(getAllPlaces).post(uploadPlaceImages, createPlace);
 
