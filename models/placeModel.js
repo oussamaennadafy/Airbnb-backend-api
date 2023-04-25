@@ -5,7 +5,7 @@ const placeSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      unique: true,
+      // unique: true,
       required: [true, "add a title to your place"],
     },
     slug: String,
