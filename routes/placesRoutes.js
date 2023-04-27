@@ -3,7 +3,6 @@ const router = express.Router();
 
 // middlewares
 const {
-  loggedIn,
   aliasTopPlaces,
 } = require("./../middlewares/userMiddlewares");
 
@@ -14,7 +13,6 @@ const {
   createPlace,
   uploadPlaceImages,
   updatePlace,
-  updateAllPlaces,
   deletePlace,
 } = require("./../controllers/placeController");
 
@@ -28,7 +26,6 @@ router
   .route("/")
   .get(getAllPlaces)
   .post(uploadPlaceImages, createPlace)
-  .patch(updateAllPlaces);
 
 // router.route("/categories/:category")
 //  .get(getPlacesByCategory)

@@ -7,16 +7,19 @@ const AppError = require("../utils/appError");
 const multer = require("multer");
 
 const multerStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: (req, file, cb) =>
+  {
     cb(null, "public/img/places");
   },
-  filename: (req, file, cb) => {
+  filename: (req, file, cb) =>
+  {
     const ext = file.mimetype.split("/").at(-1);
     cb(null, `place-${Date.now()}-${Math.random() * 1000}.${ext}`);
   },
 });
 
-const multerFilter = (req, file, cb) => {
+const multerFilter = (req, file, cb) =>
+{
   if (file.mimetype.startsWith("image")) {
     cb(null, true);
   } else {
@@ -31,7 +34,8 @@ const upload = multer({
 
 const uploadPlaceImages = upload.array("images", 15);
 
-const getAllPlaces = catchAsync(async (req, res, next) => {
+const getAllPlaces = catchAsync(async (req, res, next) =>
+{
   const features = new APIFeatures(Place.find(), req.query)
     .filter()
     .sort()
@@ -47,9 +51,10 @@ const getAllPlaces = catchAsync(async (req, res, next) => {
   });
 });
 
-const getOnePlace = catchAsync(async (req, res, next) => {
+const getOnePlace = catchAsync(async (req, res, next) =>
+{
   const { id } = req.params;
-  const place = await Place.findById(id);
+  const place = await Place.findOne({ _id: id });
   if (!place) {
     return next(new AppError(`no place found with this id : ${id}`, 404));
   }
@@ -62,7 +67,8 @@ const getOnePlace = catchAsync(async (req, res, next) => {
   });
 });
 
-const createPlace = catchAsync(async (req, res, next) => {
+const createPlace = catchAsync(async (req, res, next) =>
+{
   const {
     title,
     location,
@@ -77,10 +83,7 @@ const createPlace = catchAsync(async (req, res, next) => {
     maxInfants,
     maxPets,
   } = req.body;
-  const images = req.files?.map(
-    (image) =>
-      `http://192.168.1.111:${process.env.PORT}/img/places/${image.filename}`
-  );
+  const images = req.files?.map((image) => image.filename);
   // if (!title || !location || !host || !price || !images)
   // throw new Error("something went wrong !");
   const createdPlace = await Place.create({
@@ -106,7 +109,8 @@ const createPlace = catchAsync(async (req, res, next) => {
   });
 });
 
-const updatePlace = catchAsync(async (req, res, next) => {
+const updatePlace = catchAsync(async (req, res, next) =>
+{
   const updatedPlace = await Place.findByIdAndUpdate(req.params.id, req.body, {
     returnDocument: "after",
   });
@@ -126,23 +130,8 @@ const updatePlace = catchAsync(async (req, res, next) => {
   });
 });
 
-const updateAllPlaces = catchAsync(async (req, res, next) => {
-  let places = await Place.find();
-
-  for (let i = 0; i < places.length; i++) {
-    let images = places[i].images.map((image) =>
-      image.replace("localhost", "192.168.1.111")
-    );
-    const updated = await Place.findByIdAndUpdate(places[i]._id, { images });
-  }
-
-  res.json({
-    status: "success",
-    body: "done",
-  });
-});
-
-const deletePlace = catchAsync(async (req, res, next) => {
+const deletePlace = catchAsync(async (req, res, next) =>
+{
   const deletedPlace = await Place.findByIdAndDelete(req.params.id);
   if (!deletedPlace) {
     return next(new AppError("place is not exist", 404));
@@ -162,6 +151,4 @@ module.exports = {
   uploadPlaceImages,
   updatePlace,
   deletePlace,
-  // rarely used functions
-  updateAllPlaces,
 };

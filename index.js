@@ -1,11 +1,17 @@
 const dotenv = require("dotenv");
+const getIpAddress = require('./helpers/getIpAddress');
+
+process.env.IPAddress = getIpAddress()
+
 dotenv.config({ path: "./config.env" });
 
-process.on("uncaughtException", (err) => {
+process.on("uncaughtException", (err) =>
+{
   console.log("UNCAUGHT EXCEPTION! 💥 Shutting down...");
   console.log(err.name, err.message);
   process.exit(1);
 });
+
 
 const app = require("./app");
 const connectDB = require("./config/database");
@@ -13,16 +19,19 @@ const connectDB = require("./config/database");
 connectDB();
 
 const port = process.env.PORT || 8000;
-const server = app.listen(port, "192.168.1.111", () => {
+const server = app.listen(port, process.env.IPAddress, () =>
+{
   console.log(
-    `Server running in ${process.env.NODE_ENV} mode on port ${port}...`
+    `Server running on ${process.env.IPAddress}:${port} in ${process.env.NODE_ENV} mode.`
   );
 });
 
-process.on("unhandledRejection", (err) => {
+process.on("unhandledRejection", (err) =>
+{
   console.log("UNHANDLED REJECTION! 💥 Shutting down...");
   console.log(err.name, err.message);
-  server.close(() => {
+  server.close(() =>
+  {
     process.exit(1);
   });
 });

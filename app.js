@@ -23,7 +23,8 @@ app.use("/api/v1/places", placesRoutes);
 app.use("/api/v1/categories", categoriesRoutes);
 app.use("/api/v1/countries", countriesRoutes);
 
-app.all("*", (req, res, next) => {
+app.all("*", (req, res, next) =>
+{
   const err = new AppError(`can't find ${req.originalUrl} on this server`, 404);
   next(err);
 });
