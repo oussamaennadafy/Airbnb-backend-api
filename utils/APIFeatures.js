@@ -26,7 +26,7 @@ class APIFeatures {
       const sortBy = this.queryString.sort.split(",").join(" ");
       this.query = this.query.sort(sortBy);
     } else {
-      this.query = this.query.sort("-createdAt");
+      // this.query = this.query.sort("-createdAt");
     }
 
     return this;
@@ -45,8 +45,10 @@ class APIFeatures {
 
   paginate() {
     const page = Number(this.queryString.page) || 1;
-    const limit = Number(this.queryString.limit) || 100;
+    const limit = Number(this.queryString.limit) || 25;
     const skip = (page - 1) * limit;
+
+    console.log(skip, limit);
 
     this.query = this.query.skip(skip).limit(limit);
 

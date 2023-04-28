@@ -62,26 +62,29 @@ const placeSchema = new mongoose.Schema(
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
+    timestamps: true,
   }
 );
 
-placeSchema.virtual("shortDescription").get(function ()
-{
+placeSchema.virtual("shortDescription").get(function () {
   return `${this.description?.slice(0, 50)}...`;
 });
 
-placeSchema.post(/\bfind\b/, function (docs, next)
-{
-  docs.forEach(doc =>
-  {
-    doc.images = doc.images.map(path => `http://${process.env.IPAddress}:${process.env.port}/img/places/${path}`)
-  })
+placeSchema.post(/\bfind\b/, function (docs, next) {
+  docs.forEach((doc) => {
+    doc.images = doc.images.map(
+      (path) =>
+        `http://${process.env.IPAddress}:${process.env.port}/img/places/${path}`
+    );
+  });
   next();
 });
 
-placeSchema.post(/\bfindOne\b/, function (doc, next)
-{
-  doc.images = doc.images.map(path => `http://${process.env.IPAddress}:${process.env.port}/img/places/${path}`)
+placeSchema.post(/\bfindOne\b/, function (doc, next) {
+  doc.images = doc.images.map(
+    (path) =>
+      `http://${process.env.IPAddress}:${process.env.port}/img/places/${path}`
+  );
   next();
 });
 
