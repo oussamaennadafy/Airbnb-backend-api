@@ -2,9 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 // middlewares
-const {
-  aliasTopPlaces,
-} = require("./../middlewares/userMiddlewares");
+const { aliasTopPlaces } = require("./../middlewares/userMiddlewares");
+const { protect } = require("../middlewares/authMiddlewares");
 
 // route handlres
 const {
@@ -24,8 +23,8 @@ router.route("/:id").get(getOnePlace).delete(deletePlace).patch(updatePlace);
 
 router
   .route("/")
-  .get(getAllPlaces)
-  .post(uploadPlaceImages, createPlace)
+  .get(protect, getAllPlaces)
+  .post(uploadPlaceImages, createPlace);
 
 // router.route("/categories/:category")
 //  .get(getPlacesByCategory)

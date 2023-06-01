@@ -24,7 +24,10 @@ app.use("/api/v1/categories", categoriesRoutes);
 app.use("/api/v1/countries", countriesRoutes);
 
 app.all("*", (req, res, next) => {
-  const err = new AppError(`can't find ${req.originalUrl} on this server`, 404);
+  const err = new AppError(
+    `can't find ${req.originalUrl} with ${req.method} method on this server`,
+    404
+  );
   next(err);
 });
 

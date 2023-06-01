@@ -1,6 +1,3 @@
-const loggedIn = (req, res, next) => {
-  next();
-};
 const aliasTopPlaces = (req, res, next) => {
   req.query.sort = "price";
   req.query.limit = "5";
@@ -8,6 +5,5 @@ const aliasTopPlaces = (req, res, next) => {
 };
 
 module.exports = {
-  loggedIn,
   aliasTopPlaces,
 };
