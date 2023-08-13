@@ -3,7 +3,7 @@ const router = express.Router();
 
 // middlewares
 const { aliasTopPlaces } = require("./../middlewares/userMiddlewares");
-const { protect } = require("../middlewares/authMiddlewares");
+const { protect, restrictTo } = require("../controllers/authController");
 
 // route handlres
 const {
@@ -19,12 +19,13 @@ router.route("/top-5-cheap").get(aliasTopPlaces, getAllPlaces);
 
 // router.route("/monthly-plan/:year").get(getMonthlyPlan);
 
-router.route("/:id").get(getOnePlace).delete(deletePlace).patch(updatePlace);
-
 router
-  .route("/")
-  .get(protect, getAllPlaces)
-  .post(uploadPlaceImages, createPlace);
+  .route("/:id")
+  .get(getOnePlace)
+  .delete(protect, restrictTo("host", "admin"), deletePlace)
+  .patch(protect, restrictTo("host", "admin"), updatePlace);
+
+router.route("/").get(getAllPlaces).post(uploadPlaceImages, createPlace);
 
 // router.route("/categories/:category")
 //  .get(getPlacesByCategory)

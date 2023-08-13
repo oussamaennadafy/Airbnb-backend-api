@@ -73,8 +73,7 @@ placeSchema.virtual("shortDescription").get(function () {
 placeSchema.post(/\bfind\b/, function (docs, next) {
   docs.forEach((doc) => {
     doc.images = doc.images.map(
-      (path) =>
-        `http://${process.env.IPAddress}:${process.env.port}/img/places/${path}`
+      (path) => `http://localhost:${process.env.port}/img/places/${path}`
     );
   });
   next();
@@ -82,8 +81,7 @@ placeSchema.post(/\bfind\b/, function (docs, next) {
 
 placeSchema.post(/\bfindOne\b/, function (doc, next) {
   doc.images = doc.images.map(
-    (path) =>
-      `http://${process.env.IPAddress}:${process.env.port}/img/places/${path}`
+    (path) => `http://localhost:${process.env.port}/img/places/${path}`
   );
   next();
 });

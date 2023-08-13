@@ -5,15 +5,18 @@ const { getAllUsers } = require("./../controllers/userController");
 const {
   signup,
   login,
-  updatePassword,
+  resetPassword,
+  protect,
+  restrictTo,
+  forgotPassword,
 } = require("./../controllers/authController");
-const { protect } = require("../middlewares/authMiddlewares");
 
 router.post("/signup", signup);
 router.post("/login", login);
 
-router.patch("/updatePassword", protect, updatePassword);
+router.post("/forgotPassword", forgotPassword);
+router.patch("/resetPassword/:token", resetPassword);
 
-router.route("/").get(getAllUsers);
+router.route("/").get(protect, restrictTo("admin"), getAllUsers);
 
 module.exports = router;
