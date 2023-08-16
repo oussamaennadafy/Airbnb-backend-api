@@ -4,8 +4,8 @@
   "description": "airbnb clone backend apis",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
-    "start:prod": "set NODE_ENV=production & nodemon index.js",
+    "dev": "nodemon index.js",
+    "start": "set NODE_ENV=production & node index.js",
     "debug": "ndb index.js"
   },
   "repository": {
