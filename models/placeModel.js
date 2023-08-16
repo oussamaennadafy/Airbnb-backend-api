@@ -73,7 +73,7 @@ placeSchema.virtual("shortDescription").get(function () {
 placeSchema.post(/\bfind\b/, function (docs, next) {
   docs.forEach((doc) => {
     doc.images = doc.images.map(
-      (path) => `http://localhost:${process.env.port}/img/places/${path}`
+      (path) => `https://airbnb-backend-api.onrender.com/img/places/${path}`
     );
   });
   next();
@@ -81,7 +81,7 @@ placeSchema.post(/\bfind\b/, function (docs, next) {
 
 placeSchema.post(/\bfindOne\b/, function (doc, next) {
   doc.images = doc.images.map(
-    (path) => `http://localhost:${process.env.port}/img/places/${path}`
+    (path) => `https://airbnb-backend-api.onrender.com/img/places/${path}`
   );
   next();
 });
